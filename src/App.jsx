@@ -1,13 +1,13 @@
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
-import './styles/App.css';
-import twitterLogo from './assets/twitter-logo.svg';
-import myNFT from './utils/myNFT.json'
+import "./styles/App.css";
+import twitterLogo from "./assets/twitter-logo.svg";
+import myNFT from "./utils/myNFT.json";
 import Home from "./Components/Home";
 
-const TWITTER_HANDLE = 'ArpitKhandelwa3';
+const TWITTER_HANDLE = "ArpitKhandelwa3";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
-const OPENSEA_LINK = '';
+const OPENSEA_LINK = "";
 const TOTAL_MINT_COUNT = 50;
 
 const App = () => {
@@ -23,19 +23,19 @@ const App = () => {
       console.log("We have the ethereum object", ethereum);
     }
 
-    const accounts = await ethereum.request({ method: 'eth_accounts' });
+    const accounts = await ethereum.request({ method: "eth_accounts" });
 
     if (accounts.length !== 0) {
       const account = accounts[0];
       console.log("Found an authorized account:", account);
-      setCurrentAccount(account)
+      setCurrentAccount(account);
     } else {
-      console.log("No authorized account found")
+      console.log("No authorized account found");
     }
-  }
+  };
 
   const connectWallet = async () => {
-     try {
+    try {
       const { ethereum } = window;
 
       if (!ethereum) {
@@ -43,22 +43,24 @@ const App = () => {
         return;
       }
       /*
-      * Fancy method to request access to account.
-      */
-      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+       * Fancy method to request access to account.
+       */
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
 
       /*
-      * Boom! This should print out public address once we authorize Metamask.
-      */
+       * Boom! This should print out public address once we authorize Metamask.
+       */
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
-      setupEventListener()
+      setupEventListener();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-const setupEventListener = async () => {
+  const setupEventListener = async () => {
     // Most of this looks the same as our function askContractToMintNft
     try {
       const { ethereum } = window;
@@ -67,28 +69,33 @@ const setupEventListener = async () => {
       let provider;
       if (ethereum) {
         // Same stuff again
-        provider = new ethers.BrowserProvider(window.ethereum)
+        provider = new ethers.BrowserProvider(window.ethereum);
         signer = await provider.getSigner();
-        
-        const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, myNFT.abi, signer);
+
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          myNFT.abi,
+          signer
+        );
 
         // THIS IS THE MAGIC SAUCE.
         // This will essentially "capture" our event when our contract throws it.
         // If you're familiar with webhooks, it's very similar to that!
         connectedContract.on("NewEpicNFTMinted", (from, tokenId) => {
-          console.log(from, tokenId.toNumber())
-          alert(`Hey there! We've minted your NFT and sent it to your wallet. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`)
+          console.log(from, tokenId.toNumber());
+          alert(
+            `Hey there! We've minted your NFT and sent it to your wallet. It may be blank right now. It can take a max of 10 min to show up on OpenSea. Here's the link: https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${tokenId.toNumber()}`
+          );
         });
 
-        console.log("Setup event listener!")
-
+        console.log("Setup event listener!");
       } else {
         console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const askContractToMintNFT = async () => {
     const CONTRACT_ADDRESS = "0x72E22508317CeeB5aa98237e13acf3741060949a";
@@ -99,9 +106,13 @@ const setupEventListener = async () => {
 
       let provider;
       if (ethereum) {
-        provider = new ethers.BrowserProvider(window.ethereum)
+        provider = new ethers.BrowserProvider(window.ethereum);
         signer = await provider.getSigner();
-        const connectedContract = new ethers.Contract(CONTRACT_ADDRESS, myNFT.abi, signer);
+        const connectedContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          myNFT.abi,
+          signer
+        );
 
         console.log("approve txn on Metamask");
         let nftTxn = await connectedContract.makeNFT();
@@ -109,46 +120,41 @@ const setupEventListener = async () => {
         console.log("mining txn");
         await nftTxn.wait();
 
-        console.log(`Txn mined at https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
-
-      }
-      else {
+        console.log(
+          `Txn mined at https://rinkeby.etherscan.io/tx/${nftTxn.hash}`
+        );
+      } else {
         console.log("Ethereum obj doesn't exist");
       }
+    } catch (error) {
+      console.log(error);
     }
-    catch (error) { console.log(error); }
-
-  }
+  };
   // Render Methods
   const renderNotConnectedContainer = () => (
-    <button onClick={connectWallet} className="cta-button connect-wallet-button">
+    <button
+      onClick={connectWallet}
+      className="cta-button connect-wallet-button"
+    >
       Connect to Wallet
     </button>
   );
 
   useEffect(() => {
     checkIfWalletIsConnected();
-  }, [])
+  }, []);
 
   /*
-  * Added a conditional render! We don't want to show Connect to Wallet if we're already conencted :).
-  */
+   * Added a conditional render! We don't want to show Connect to Wallet if we're already conencted :).
+   */
 
   return (
     <div className="App">
       <div className="container">
         <div className="header-container">
-          <p className="header gradient-text">My NFT Collection</p>
-          <p className="sub-text">
-            Each unique. Each beautiful. Get your NFT today.
-          </p>
-          {currentAccount === ""
-            ? renderNotConnectedContainer()
-            : (
-              
-          <Home />
-            )
-          }
+          <p className="header gradient-text">Block Auctions</p>
+          <p className="sub-text">Your gateway to Web3 Live Auctions</p>
+          {currentAccount === "" ? renderNotConnectedContainer() : <Home />}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
@@ -157,7 +163,9 @@ const setupEventListener = async () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >built by Arpit</a>
+          >
+            built by Arpit
+          </a>
         </div>
       </div>
     </div>

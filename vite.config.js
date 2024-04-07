@@ -16,6 +16,6 @@ export default {
   esbuild: {
     include: /\.[jt]sx?$/,
     exclude: [],
-    loader: "jsx",
+    loader: 'jsx',
   },
 };
