@@ -1,24 +1,25 @@
 import { WorkSpaceType } from "../Enums/WorkSpaceType";
 import React from "react";
+
 const WorkSpace = ({worskSpaceType}) => {
     const setWorkSpace = () =>{
         switch(worskSpaceType){
             case WorkSpaceType.Profile:
-                < Profile />
+                return < Profile />
             case WorkSpaceType.Auction:
-                < Auction />
+                return < Auction />
             case WorkSpaceType.SetTransaction:
-                < SetTransaction />
+                return < SetTransaction />
             case WorkSpaceType.StartAuction:
-                < StartAuction />
+                return < StartAuction />
             case WorkSpaceType.ViewTransaction:
-                < ViewTransaction />
+                return < ViewTransaction />
             default:
-                < Profile />
+                return < Profile />
         }
     }
     return (<div>
-        
+        {setWorkSpace()}
     </div>)
 }
 export default WorkSpace;
