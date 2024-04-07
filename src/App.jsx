@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import './styles/App.css';
 import twitterLogo from './assets/twitter-logo.svg';
 import myNFT from './utils/myNFT.json'
+import Home from "./Components/Home";
 
 const TWITTER_HANDLE = 'ArpitKhandelwa3';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
@@ -144,9 +145,8 @@ const setupEventListener = async () => {
           {currentAccount === ""
             ? renderNotConnectedContainer()
             : (
-              <button onClick={askContractToMintNFT } className="cta-button connect-wallet-button">
-                Mint NFT
-      </button>
+              
+          <Home />
             )
           }
         </div>
