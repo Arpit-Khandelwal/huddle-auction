@@ -1,4 +1,5 @@
 import { WorkSpaceType } from "../Enums/WorkSpaceType";
+import React from "react";
 const WorkSpace = ({worskSpaceType}) => {
     const setWorkSpace = () =>{
         switch(worskSpaceType){
@@ -17,7 +18,7 @@ const WorkSpace = ({worskSpaceType}) => {
         }
     }
     return (<div>
-        {setWorkSpace()}
+        
     </div>)
 }
 export default WorkSpace;
